@@ -43,18 +43,18 @@
     </ul>
   </li>
 
-    <li><strong>FileTransferGUI</strong>: Cửa sổ hiển thị quá trình gửi file, tiến độ truyền, trạng thái thành công/thất bại.</li>
+   <li><strong>FileTransferGUI</strong>: Cửa sổ hiển thị quá trình gửi file, tiến độ truyền, trạng thái thành công/thất bại.</li>
 
-    <li><strong>UDPServer</strong>: Chương trình <strong>Server (Receiver)</strong> lắng nghe gói tin UDP và ghi dữ liệu nhận được thành file trên server.</li>
+  <li><strong>UDPServer</strong>: Chương trình <strong>Server (Receiver)</strong> lắng nghe gói tin UDP và ghi dữ liệu nhận được thành file trên server.</li>
 
-    <li><strong>UDPClient</strong>: Chương trình <strong>Client (Sender)</strong> đọc file, chia nhỏ thành các gói tin và gửi qua UDP tới <code>UDPServer</code>.</li>
+  <li><strong>UDPClient</strong>: Chương trình <strong>Client (Sender)</strong> đọc file, chia nhỏ thành các gói tin và gửi qua UDP tới <code>UDPServer</code>.</li>
 
-    <li><strong>MongoDBHelper</strong>: Lớp tiện ích kết nối MongoDB, hỗ trợ các thao tác:
-        <ul>
-            <li>Xem danh sách file</li>
-            <li>Kiểm tra đăng nhập và đăng ký người dùng</li>
-        </ul>
-    </li>
+  <li><strong>MongoDBHelper</strong>: Lớp tiện ích kết nối MongoDB, hỗ trợ các thao tác:
+    <ul>
+      <li>Xem danh sách file</li>
+      <li>Kiểm tra đăng nhập và đăng ký người dùng</li>
+    </ul>
+  </li>
 </ul>
 
 ### Kiến trúc
@@ -74,27 +74,37 @@
 
 ## 3. Một số màn hình giao diện
 <p align="center">
-   <img src="images/login.png" alt="Đăng nhập" width="500"/>
+   <img width="608" height="381" alt="image" src="https://github.com/user-attachments/assets/4261982f-963f-4aa6-b62f-21ec42106501" />
+
 </p>
 <p align="center">
-   <em>Hình 1: Giao diện đăng nhập/đăng ký</em>
+   <em>Hình 1: Giao diện đăng nhập</em>
 </p>
 
 <p align="center">
-   <img src="images/userpanel.png" alt="User Panel" width="500"/>
+   <img width="634" height="424" alt="image" src="https://github.com/user-attachments/assets/c7b37019-caac-4272-bfe1-9a32e0fdda10" />
+
 </p>
 <p align="center">
-   <em>Hình 2: Giao diện người dùng gửi/xoá file</em>
+   <em>Hình 2: Giao diện đăng ký</em>
 </p>
 
 <p align="center">
-   <img src="images/adminpanel.png" alt="Admin Panel" width="500"/>
+   <img width="1208" height="793" alt="image" src="https://github.com/user-attachments/assets/ae7fa69f-498e-4739-881d-179260b3bedb" />
+
 </p>
 <p align="center">
-   <em>Hình 3: Giao diện quản lý file của admin</em>
+   <em>Hình 3: Giao diện quản người dùng</em>
+</p>
+<p align="center">
+   <img width="1237" height="779" alt="image" src="https://github.com/user-attachments/assets/a8581d55-25c8-410e-92d8-1d4c36c2dc4c" />
+
+
+</p>
+<p align="center">
+   <em>Hình 3: Giao diện quản admin</em>
 </p>
 
-*(Bạn có thể chụp màn hình thực tế của ứng dụng để thay thế các ảnh trên)*
 
 ## 4. Cài đặt & Sử dụng
 **Yêu cầu môi trường:**
