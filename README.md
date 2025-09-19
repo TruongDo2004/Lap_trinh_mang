@@ -4,7 +4,7 @@
     </a>
 </h2>
 <h2 align="center">
-     ỨNG DỤNG GỬI FILE QUA UDP (PHÂN QUYỀN ADMIN - USER)
+     ỨNG DỤNG GỬI FILE QUA UDP
 </h2>
 <div align="center">
     <p align="center">
