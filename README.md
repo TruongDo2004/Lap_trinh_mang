@@ -32,7 +32,7 @@
     <ul>
       <li>Gửi file (qua UDP bằng <code>UDPClient</code>)</li>
       <li>Hiển thị danh sách file đã gửi</li>
-      <li>Xoá file đã gửi của chính mình khỏi MongoDB</li>
+      <li>Xoá file đã gửi của chính mình khỏi giao diện</li>
     </ul>
   </li>
 
