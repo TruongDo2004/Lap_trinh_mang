@@ -20,29 +20,28 @@
 
 ## 1. Giới thiệu hệ thống
 <ul>
-    <li><strong>Main</strong>: Điểm vào chính của chương trình, khởi động giao diện đăng nhập đầu tiên.</li>
+     <li><strong>Main</strong>: Điểm vào chính của chương trình, khởi động giao diện đăng nhập đầu tiên.</li>
 
-    <li><strong>LoginGUI</strong>: Giao diện đăng nhập, kiểm tra thông tin người dùng trong MongoDB. 
-        Nếu đăng nhập là admin thì mở <code>AdminPanelGUI</code>, nếu là người dùng thì mở <code>UserPanelGUI</code>.
-    </li>
+  <li><strong>LoginGUI</strong>: Giao diện đăng nhập, kiểm tra thông tin người dùng trong MongoDB. 
+      Nếu đăng nhập là admin thì mở <code>AdminPanelGUI</code>, nếu là người dùng thì mở <code>UserPanelGUI</code>.
+  </li>
 
-    <li><strong>RegisterGUI</strong>: Giao diện đăng ký tài khoản mới, ghi thông tin người dùng mới vào MongoDB.</li>
+  <li><strong>RegisterGUI</strong>: Giao diện đăng ký tài khoản mới, ghi thông tin người dùng mới vào MongoDB.</li>
 
-    <li><strong>UserPanelGUI</strong>: Giao diện dành cho người dùng thường — cho phép:
-        <ul>
-            <li>Gửi file (qua UDP bằng <code>UDPClient</code>)</li>
-            <li>Hiển thị danh sách file đã gửi</li>
-            <li>Xoá file đã gửi của chính mình khỏi MongoDB</li>
-        </ul>
-    </li>
+  <li><strong>UserPanelGUI</strong>: Giao diện dành cho người dùng thường — cho phép:
+    <ul>
+      <li>Gửi file (qua UDP bằng <code>UDPClient</code>)</li>
+      <li>Hiển thị danh sách file đã gửi</li>
+      <li>Xoá file đã gửi của chính mình khỏi MongoDB</li>
+    </ul>
+  </li>
 
-    <li><strong>AdminPanelGUI</strong>: Giao diện dành cho admin — cho phép:
-        <ul>
-            <li>Xem toàn bộ file của tất cả người dùng</li>
-            <li>Xoá file bất kỳ khỏi giao diện</li>
-            <li>Phân biệt màu hàng trong bảng theo từng <code>user_id</code> để dễ theo dõi</li>
-        </ul>
-    </li>
+  <li><strong>AdminPanelGUI</strong>: Giao diện dành cho admin — cho phép:
+    <ul>
+      <li>Hiển thị danh sách tất cả người dùng</li>
+      <li>Xem và xoá file của bất kỳ người dùng nào</li>
+    </ul>
+  </li>
 
     <li><strong>FileTransferGUI</strong>: Cửa sổ hiển thị quá trình gửi file, tiến độ truyền, trạng thái thành công/thất bại.</li>
 
