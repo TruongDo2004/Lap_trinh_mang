@@ -20,51 +20,67 @@
 
 ## 1. Giới thiệu hệ thống
 <ul>
-     <li><strong>Main</strong>: Điểm vào chính của chương trình, khởi động giao diện đăng nhập đầu tiên.</li>
+     <li><strong>Main</strong>: Điểm vào chính của chương trình, khởi chạy <code>LoginGUI</code> làm cửa sổ đầu tiên.</li>
 
-  <li><strong>LoginGUI</strong>: Giao diện đăng nhập, kiểm tra thông tin người dùng trong MongoDB. 
-      Nếu đăng nhập là admin thì mở <code>AdminPanelGUI</code>, nếu là người dùng thì mở <code>UserPanelGUI</code>.
+  <li><strong>LoginGUI</strong>: Giao diện đăng nhập. 
+      - Kiểm tra tài khoản trong MongoDB thông qua <code>MongoDBHelper.login()</code>.  
+      - Nếu đăng nhập là <strong>admin</strong> → mở <code>AdminPanelGUI</code>.  
+      - Nếu là <strong>user</strong> → mở <code>FileTransferGUI</code>.
   </li>
 
-  <li><strong>RegisterGUI</strong>: Giao diện đăng ký tài khoản mới, ghi thông tin người dùng mới vào MongoDB.</li>
+  <li><strong>RegisterGUI</strong>: Giao diện đăng ký tài khoản mới, ghi thông tin vào MongoDB (tài khoản có role "user" mặc định).</li>
 
-  <li><strong>UserPanelGUI</strong>: Giao diện dành cho người dùng thường — cho phép:
+  <li><strong>FileTransferGUI</strong>: Giao diện chính của người dùng:
     <ul>
-      <li>Gửi file (qua UDP bằng <code>UDPClient</code>)</li>
-      <li>Hiển thị danh sách file đã gửi</li>
-      <li>Xoá file đã gửi của chính mình khỏi giao diện</li>
+      <li>Chọn và gửi file đến người nhận qua UDP bằng <code>UDPClient</code>.</li>
+      <li>Hiển thị tiến trình truyền file (progress bar, trạng thái).</li>
+      <li>Lưu file nhận được vào thư mục <code>downloads/</code>.</li>
     </ul>
   </li>
 
-  <li><strong>AdminPanelGUI</strong>: Giao diện dành cho admin — cho phép:
+  <li><strong>AdminPanelGUI</strong>: Giao diện quản trị dành cho admin:
     <ul>
-      <li>Hiển thị danh sách tất cả người dùng</li>
-      <li>Xem và xoá file của bất kỳ người dùng nào</li>
+      <li>Xem danh sách tất cả các giao dịch file từ MongoDB.</li>
+      <li>Tìm kiếm giao dịch theo người gửi.</li>
+      <li>Đăng xuất quay về màn hình đăng nhập.</li>
     </ul>
   </li>
 
-   <li><strong>FileTransferGUI</strong>: Cửa sổ hiển thị quá trình gửi file, tiến độ truyền, trạng thái thành công/thất bại.</li>
-
-  <li><strong>UDPServer</strong>: Chương trình <strong>Server (Receiver)</strong> lắng nghe gói tin UDP và ghi dữ liệu nhận được thành file trên server.</li>
-
-  <li><strong>UDPClient</strong>: Chương trình <strong>Client (Sender)</strong> đọc file, chia nhỏ thành các gói tin và gửi qua UDP tới <code>UDPServer</code>.</li>
-
-  <li><strong>MongoDBHelper</strong>: Lớp tiện ích kết nối MongoDB, hỗ trợ các thao tác:
+  <li><strong>UDPServer</strong>: Chương trình server lắng nghe trên một cổng UDP (8894/8895).
     <ul>
-      <li>Xem danh sách file</li>
-      <li>Kiểm tra đăng nhập và đăng ký người dùng</li>
+      <li>Nhận file từ client qua chuỗi gói tin <code>UPLOAD;...;UPLOAD_CHUNK;...;UPLOAD_END</code>.</li>
+      <li>Lưu file vào thư mục <code>server_storage/</code>.</li>
+      <li>Lưu metadata giao dịch vào MongoDB (tên file, người gửi, người nhận, thời gian).</li>
+      <li>Hỗ trợ client tải file về qua gói tin <code>DOWNLOAD</code>.</li>
+    </ul>
+  </li>
+
+  <li><strong>UDPClient</strong>: Chương trình client cho từng user.
+    <ul>
+      <li>Mỗi user lắng nghe trên port riêng (tính từ hash username).</li>
+      <li>Gửi file: chia nhỏ thành chunk và gửi qua UDP.</li>
+      <li>Nhận file: lắp ghép chunk lại, ghi thành file.</li>
+    </ul>
+  </li>
+
+  <li><strong>MongoDBHelper</strong>: Lớp tiện ích kết nối MongoDB:
+    <ul>
+      <li>Đăng nhập (kiểm tra username, password, role).</li>
+      <li>Đăng ký tài khoản mới.</li>
+      <li>Lưu và truy vấn danh sách giao dịch file.</li>
     </ul>
   </li>
 </ul>
 
 ### Kiến trúc
-- **Client**: Giao diện người dùng — đăng nhập, đăng ký, gửi file, xem và xoá file.
-- **Server**: Lắng nghe gói UDP, nhận file và ghi lại, đồng thời MongoDB lưu metadata file và tài khoản.
+- **Client**: gồm LoginGUI, RegisterGUI, FileTransferGUI (người dùng) và AdminPanelGUI (admin).  
+- **Server**: UDPServer nhận/gửi file, MongoDB lưu metadata.  
+- **Giao thức**: UDP, gói tin header + chunks + end marker. Dữ liệu file có thể gửi raw bytes hoặc base64 để đảm bảo an toàn khi đóng gói.
 
 Đặc điểm nổi bật:
-- Phân quyền admin và user rõ ràng.
-- Hiển thị màu sắc khác nhau cho từng user (trên bảng admin).
-- Giao diện Swing đơn giản, dễ sử dụng.
+- Phân quyền rõ ràng: admin ↔ user.
+- Giao diện Swing đơn giản, có màu sắc trực quan.
+- Lưu lịch sử giao dịch file vào MongoDB.
 
 ## 2. Ngôn ngữ & Công nghệ
 [![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)](https://www.java.com/)
@@ -74,53 +90,49 @@
 
 ## 3. Một số màn hình giao diện
 <p align="center">
-   <img width="608" height="381" alt="image" src="https://github.com/user-attachments/assets/4261982f-963f-4aa6-b62f-21ec42106501" />
-
+   <img width="588" height="342" alt="image" src="https://github.com/user-attachments/assets/44b99aab-b0dd-42a6-9eaf-a3f604757be4" />
 </p>
 <p align="center">
    <em>Hình 1: Giao diện đăng nhập</em>
 </p>
 
 <p align="center">
-   <img width="634" height="424" alt="image" src="https://github.com/user-attachments/assets/c7b37019-caac-4272-bfe1-9a32e0fdda10" />
-
+   <img width="561" height="392" alt="image" src="https://github.com/user-attachments/assets/10dd68f7-c028-4a86-acfe-b4078b65e7d5" />
 </p>
 <p align="center">
    <em>Hình 2: Giao diện đăng ký</em>
 </p>
 
 <p align="center">
-   <img width="1208" height="793" alt="image" src="https://github.com/user-attachments/assets/ae7fa69f-498e-4739-881d-179260b3bedb" />
-
+   <img width="1236" height="802" alt="image" src="https://github.com/user-attachments/assets/04fd0e26-ae33-4ccd-a558-6762c8485256" />
 </p>
 <p align="center">
-   <em>Hình 3: Giao diện quản người dùng</em>
+   <em>Hình 3: Giao diện người dùng</em>
+</p>
+
+<p align="center">
+   <img width="1170" height="860" alt="image" src="https://github.com/user-attachments/assets/7ad7cb37-830d-468b-a652-49493f22dac8" />
 </p>
 <p align="center">
-   <img width="1237" height="779" alt="image" src="https://github.com/user-attachments/assets/a8581d55-25c8-410e-92d8-1d4c36c2dc4c" />
-
-
+   <em>Hình 4: Giao diện admin</em>
 </p>
-<p align="center">
-   <em>Hình 3: Giao diện quản admin</em>
-</p>
-
 
 ## 4. Cài đặt & Sử dụng
 **Yêu cầu môi trường:**
 - Java Development Kit (JDK) 8 trở lên.
-- MongoDB.
+- MongoDB (chạy trên localhost).
 - IDE: Eclipse/IntelliJ hoặc chạy trực tiếp qua terminal.
-- Thư viện MongoDB (.jar): mongodb-driver-sync-5.5.0, bson-5.5.0, mongodb-driver-core-5.5.0
+- Thư viện MongoDB (.jar): mongodb-driver-sync-5.5.0, bson-5.5.0, mongodb-driver-core-5.5.0.
 
 **Cách triển khai:**
 1. Import project vào IDE.
-2. Chạy file `BTL_LTM` ở MongoDB để khởi tạo cơ sở dữ liệu.
-3. Chạy `UDPServer.java`.
-4. Chạy nhiều `Main.java` để mở nhiều cửa sổ client.
-5. Đăng ký tài khoản và bắt đầu gửi file.
+2. Chạy script khởi tạo DB `BTL_LTM` trong MongoDB.
+3. Chạy `UDPServer.java` để mở server.
+4. Chạy nhiều lần `Main.java` để mở nhiều client.
+5. Đăng ký tài khoản mới, đăng nhập và thử gửi/nhận file.
+6. Nếu đăng nhập bằng tài khoản admin, giao diện <code>AdminPanelGUI</code> sẽ được mở.
 
-<p><strong>Lưu ý:</strong> UDP không đảm bảo toàn vẹn dữ liệu, nên chỉ nên truyền file nhỏ.</p>
+<p><strong>Lưu ý:</strong> UDP không đảm bảo toàn vẹn dữ liệu, phù hợp cho truyền file nhỏ. Nếu cần an toàn hơn có thể cải tiến bằng cơ chế ACK/retry.</p>
 
 ## 5. Thành viên & Thông tin
 - **Sinh viên thực hiện**: Đỗ Trường Anh
